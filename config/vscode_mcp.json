@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "django-mcp-server": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["mcp_servers/django_server.py"],
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "myproject.settings"
+      }
+    }
+  }
+}
