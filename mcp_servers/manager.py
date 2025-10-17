@@ -111,11 +111,38 @@ class MockMCPSession:
         
         elif tool_name == "query_model":
             model_name = arguments.get("model_name", "User")
+            filters = arguments.get("filters", {})
+            
             if model_name == "User":
                 return ToolResult([types.TextContent(
                     type="text",
                     text='[{"id": 1, "username": "testuser", "email": "test@example.com"}]'
                 )])
+            elif model_name == "Memo":
+                # Simulate memo existence after creation
+                if "title" in filters:
+                    title = filters["title"]
+                    if "Test Memo" in title or "Updated" in title:
+                        return ToolResult([types.TextContent(
+                            type="text",
+                            text='[{"id": 1, "title": "' + title + '", "content": "Test content", "user": 1}]'
+                        )])
+                    else:
+                        return ToolResult([types.TextContent(
+                            type="text",
+                            text='[]'
+                        )])
+                elif "id" in filters:
+                    # Return memo for verification queries  
+                    return ToolResult([types.TextContent(
+                        type="text",
+                        text='[{"id": 1, "title": "Updated Test Memo", "content": "Test content", "user": 1}]'
+                    )])
+                else:
+                    return ToolResult([types.TextContent(
+                        type="text",
+                        text='[]'
+                    )])
             else:
                 return ToolResult([types.TextContent(
                     type="text",
